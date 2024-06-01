@@ -3,5 +3,6 @@ export interface Booking {
   property: string;
   startDate: string;
   endDate: string;
+  nights: number;
   price: number;
 }
