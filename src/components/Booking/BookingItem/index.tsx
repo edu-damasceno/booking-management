@@ -1,21 +1,12 @@
-import React from "react";
-import { useBookings } from "../../context/useBookings";
-import { Booking } from "../../types";
+import { Booking } from "../../../types";
+import useBookingItem from "./useBookingItem";
 
 interface BookingItemProps {
   booking: Booking;
 }
 
 const BookingItem: React.FC<BookingItemProps> = ({ booking }) => {
-  const { deleteBooking } = useBookings();
-
-  const handleDelete = () => {
-    deleteBooking(booking.id);
-  };
-
-  const handleEdit = () => {
-    console.log('edit booking', booking)
-  };
+  const { handleDelete, handleEdit } = useBookingItem(booking);
 
   if (!booking) return <></>;
 
@@ -27,10 +18,13 @@ const BookingItem: React.FC<BookingItemProps> = ({ booking }) => {
         {new Intl.DateTimeFormat("en").format(new Date(booking.startDate))}
       </p>
       <p>
-        Check-out:{" "}
+        Checkout:{" "}
         {new Intl.DateTimeFormat("en").format(new Date(booking.endDate))}
       </p>
-      <p>Price: U${booking.price.toFixed(2)}</p>
+      <p>
+        Price: U${booking.price.toFixed(2)} ({booking.nights}{" "}
+        {`Night${booking.nights > 1 ? `s` : ``}`})
+      </p>
       <button
         onClick={handleEdit}
         className="bg-yellow-500 text-white p-2 rounded mr-2"
