@@ -40,16 +40,6 @@ const BookingProvider: React.FC<{ children: React.ReactNode }> = ({
           "Booking dates overlap with an existing booking for this property.",
       };
     }
-    console.log('bookings', bookings)
-    console.log(
-      bookings.some((b) => {
-        console.log("b.id", b.id, "booking.id", booking.id);
-      })
-    );
-    console.log(
-      "ookings.some((b) => b.id === booking.id",
-      bookings.some((b) => b.id === booking.id)
-    );
 
     if (bookings.some((b) => b.id === booking.id)) {
       setBookings(bookings.map((b) => (b.id === booking.id ? booking : b)));

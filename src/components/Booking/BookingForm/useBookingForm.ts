@@ -91,13 +91,16 @@ const useBookingForm = ({
       if (!editMode) resetFormData();
       setErrorMessage(undefined);
 
-      setSuccessMessage("Booking saved successfully!");
+      setSuccessMessage(
+        editMode
+          ? "Booking edited successfully!"
+          : "Booking created successfully!"
+      );
 
       const timer = setTimeout(() => {
         setSuccessMessage(undefined);
         if (editMode && onSaveSuccess) {
           onSaveSuccess();
-          console.log("AQUI editMode", editMode, onSaveSuccess);
         }
       }, 2000);
 
@@ -115,7 +118,7 @@ const useBookingForm = ({
     setErrorMessage(undefined);
   };
 
-  const handleRangeChange = (dateRange: DateRange) => {
+  const handleRangeChange = (dateRange: DateRange | undefined) => {
     if (dateRange) {
       setFormData({
         ...formData,
@@ -123,10 +126,6 @@ const useBookingForm = ({
       });
     }
   };
-
-  useEffect(() => {
-    console.log("formData", formData);
-  }, [formData]);
 
   return {
     formData,

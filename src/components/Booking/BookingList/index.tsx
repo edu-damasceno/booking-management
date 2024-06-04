@@ -36,6 +36,9 @@ const BookingList: React.FC = () => {
             color="indigo"
             className="text-xl font-bold mb-4 text-center"
             textGradient
+            placeholder={undefined}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
           >
             Bookings List
           </Typography>
@@ -46,6 +49,9 @@ const BookingList: React.FC = () => {
               label="Sort list by"
               onChange={(val) => handleSortChange(val)}
               value={sortBy}
+              placeholder={undefined}
+              onPointerEnterCapture={undefined}
+              onPointerLeaveCapture={undefined}
             >
               <Option value="recent">Recent Bookings</Option>
               <Option value="property">Property name</Option>
@@ -59,20 +65,30 @@ const BookingList: React.FC = () => {
               <Card
                 key={index}
                 className="p-4 mb-4 bg-blue-gray-50 flex-row justify-between items-center"
+                placeholder={undefined}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
               >
                 <div>
                   <Typography
                     variant="h3"
                     color="indigo"
                     className="font-bold text-xl"
+                    placeholder={undefined}
+                    onPointerEnterCapture={undefined}
+                    onPointerLeaveCapture={undefined}
                   >
-                    {booking.property.name} <small className="text-gray-500">#{booking.id}</small>
+                    {booking.property.name}{" "}
+                    <small className="text-gray-500">#{booking.id}</small>
                   </Typography>
                   {booking.dateRange.from && booking.dateRange.to && (
                     <Typography
                       variant="small"
                       color="blue-gray"
                       className="font-normal"
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
                     >
                       {format(booking.dateRange.from, "PPP")} ~{" "}
                       {format(booking.dateRange.to, "PPP")}
@@ -84,6 +100,9 @@ const BookingList: React.FC = () => {
                       variant="small"
                       color="blue-gray"
                       className="font-normal"
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
                     >
                       U${booking.price.toFixed(2)} ({booking.nights}{" "}
                       {`Night${booking.nights > 1 ? `s` : ``}`})
@@ -97,6 +116,9 @@ const BookingList: React.FC = () => {
                       className="flex items-center mb-2 sm:mb-0 sm:mr-2 md:mb-2 mb-mr-0 lg:mb-0 bg-gray-300 text-gray"
                       size="sm"
                       onClick={() => handleEdit(booking)}
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -119,6 +141,9 @@ const BookingList: React.FC = () => {
                       className="flex items-center mt-2 sm:mt-0 sm:ml-2 md:mt-2 md:ml-0 lg:mt-0 bg-gray-300 text-gray"
                       size="sm"
                       onClick={() => handleDelete(booking.id)}
+                      placeholder={undefined}
+                      onPointerEnterCapture={undefined}
+                      onPointerLeaveCapture={undefined}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -143,18 +168,36 @@ const BookingList: React.FC = () => {
         </>
       )}
 
-      <Dialog open={open} handler={handleOpen} size="sm">
-        <DialogHeader>
+      <Dialog
+        open={open}
+        handler={handleOpen}
+        size="sm"
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
+      >
+        <DialogHeader
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        >
           <Typography
             variant="h1"
             color="indigo"
             className="text-2xl font-bold mb-0 text-center w-full"
             textGradient
+            placeholder={undefined}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
           >
             Edit Booking
           </Typography>
         </DialogHeader>
-        <DialogBody>
+        <DialogBody
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        >
           <BookingForm
             properties={properties}
             defaultValue={currentBooking}
@@ -162,12 +205,20 @@ const BookingList: React.FC = () => {
             editMode
           />
         </DialogBody>
-        <DialogFooter className="pt-0">
+        <DialogFooter
+          className="pt-0"
+          placeholder={undefined}
+          onPointerEnterCapture={undefined}
+          onPointerLeaveCapture={undefined}
+        >
           <Button
             variant="text"
             color="red"
             onClick={handleOpen}
             className="mx-auto"
+            placeholder={undefined}
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
           >
             <span>Cancel</span>
           </Button>
