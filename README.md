@@ -1,10 +1,11 @@
 
 # Booking Management System
 
+[Gravação de tela de 04-06-2024 13:02:09.webm](https://github.com/edu-damasceno/booking-management/assets/64082638/06de5e12-57eb-44a1-ba3d-43ece931aaba)
+
 This repository contains a booking management system built with React, TypeScript, and Vite. It provides a minimal setup for creating a production-ready booking application with mocked data stored in the context.
 
 ## Table of Contents
-
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
