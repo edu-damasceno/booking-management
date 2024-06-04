@@ -1,46 +1,75 @@
 import React, { useState, useEffect } from "react";
 import { useBookings } from "../../../context/useBookings";
-import { properties } from "../../../data/properties";
+import { Booking } from "../../../types";
+import { DateRange } from "react-day-picker";
+import { iProps } from ".";
 
-const useBookingForm = () => {
+const initialFormData = {
+  property: { id: "", name: "", pricePerNight: 0 },
+  nights: 0,
+  price: 0,
+  id: "",
+  dateRange: { from: undefined, to: undefined },
+};
+
+const useBookingForm = ({
+  properties,
+  defaultValue,
+  onSaveSuccess,
+  editMode,
+}: iProps) => {
   const { saveBooking } = useBookings();
-  const initialFormData = {
-    propertyId: "",
-    startDate: "",
-    endDate: "",
-    nights: 0,
-    price: "",
-    id: null,
-  };
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState<Booking>(initialFormData);
   const [totalNights, setTotalNights] = useState<number | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined
+  );
+  const [successMessage, setSuccessMessage] = useState<string | undefined>(
+    undefined
+  );
 
   useEffect(() => {
-    if (formData.startDate && formData.endDate && formData.propertyId) {
+    if (defaultValue) {
+      setFormData(defaultValue);
+    }
+  }, [defaultValue]);
+
+  useEffect(() => {
+    if (
+      formData.dateRange.from &&
+      formData.dateRange.to &&
+      formData.property.id
+    ) {
       const property = properties.find(
-        (prop) => prop.id === parseInt(formData.propertyId)
+        (prop) => prop.id === formData.property.id
       );
       if (property) {
         const nights =
-          (new Date(formData.endDate).getTime() -
-            new Date(formData.startDate).getTime()) /
+          (new Date(formData.dateRange.to).getTime() -
+            new Date(formData.dateRange.from).getTime()) /
           (1000 * 3600 * 24);
-        
 
         if (nights > 0) {
           const totalPrice = nights * property.pricePerNight;
           setTotalNights(nights);
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            price: totalPrice.toFixed(2),
+          setFormData({
+            ...formData,
+            price: parseFloat(totalPrice.toFixed(2)),
             nights,
-          }));
+          });
         } else {
           setTotalNights(null);
         }
       }
+    } else {
+      setTotalNights(null);
     }
-  }, [formData.startDate, formData.endDate, formData.propertyId]);
+  }, [
+    properties,
+    formData.dateRange.from,
+    formData.dateRange.to,
+    formData.property.id,
+  ]);
 
   const resetFormData = () => {
     setFormData(initialFormData);
@@ -49,42 +78,67 @@ const useBookingForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const property = properties.find(
-      (prop) => prop.id === parseInt(formData.propertyId)
-    );
     const booking = {
       ...formData,
-      id: formData.id ?? Date.now(),
-      price: parseFloat(formData.price),
-      property: property ? property.name : "",
+      id: editMode ? formData.id : Date.now().toString(),
+      price: formData.price,
+      property: { ...formData.property },
     };
 
-    if (saveBooking(booking)) {
-      resetFormData();
-    }
-  };
+    const saveBookingResponse = saveBooking(booking);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    if (e.target.value) {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (saveBookingResponse.success) {
+      if (!editMode) resetFormData();
+      setErrorMessage(undefined);
+
+      setSuccessMessage("Booking saved successfully!");
+
+      const timer = setTimeout(() => {
+        setSuccessMessage(undefined);
+        if (editMode && onSaveSuccess) {
+          onSaveSuccess();
+          console.log("AQUI editMode", editMode, onSaveSuccess);
+        }
+      }, 2000);
+
+      return () => clearTimeout(timer);
     } else {
-      resetFormData();
+      setErrorMessage(saveBookingResponse.message);
     }
   };
 
-  const handleDateChange = (date: Date | null, name: string) => {
-    setFormData({ ...formData, [name]: date });
+  const handlePropertyChange = (val: string | undefined) => {
+    if (val) {
+      const property = properties.find((prop) => prop.id === val);
+      if (property) setFormData({ ...formData, property: property });
+    }
+    setErrorMessage(undefined);
   };
+
+  const handleRangeChange = (dateRange: DateRange) => {
+    if (dateRange) {
+      setFormData({
+        ...formData,
+        dateRange,
+      });
+    }
+  };
+
+  useEffect(() => {
+    console.log("formData", formData);
+  }, [formData]);
 
   return {
-    properties,
     formData,
     totalNights,
-    handleChange,
-    handleDateChange,
     handleSubmit,
+    setFormData,
+    handlePropertyChange,
+    handleRangeChange,
+    errorMessage,
+    setErrorMessage,
+    successMessage,
+    setSuccessMessage,
   };
 };
 
