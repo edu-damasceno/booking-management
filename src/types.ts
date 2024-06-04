@@ -1,8 +1,15 @@
+import { DateRange } from "react-day-picker";
+
+export interface Property {
+  id: string;
+  name: string;
+  pricePerNight: number;
+}
+
 export interface Booking {
-  id: number;
-  property: string;
-  startDate: string;
-  endDate: string;
+  property: Property;
   nights: number;
   price: number;
+  id: string;
+  dateRange: DateRange;
 }
