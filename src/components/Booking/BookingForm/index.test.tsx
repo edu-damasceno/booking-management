@@ -24,7 +24,6 @@ const defaultFormData: Booking = {
   id: "1",
 };
 
-// Adjusting the mock return value to match the expected types
 mockUseBookingForm.mockReturnValue({
   formData: defaultFormData,
   totalNights: 4,
@@ -52,24 +51,19 @@ describe("BookingForm Component", () => {
   test("disables submit button until property and dates are selected", () => {
     render(<BookingForm properties={properties} />);
 
-    // Inicialmente, o botão de envio deve estar desativado
     let submitButton = screen.getByRole("button", { name: /submit/i });
     expect(submitButton).toBeDisabled();
 
-    // Simula a seleção de uma propriedade
     const select = screen.getByLabelText("Select a property");
     fireEvent.change(select, { target: { value: properties[0].id } });
 
-    // O botão de envio ainda deve estar desativado porque as datas não foram selecionadas
     expect(submitButton).toBeDisabled();
 
-    // Simula a seleção de datas
     mockUseBookingForm().handleRangeChange({
       from: new Date(),
       to: new Date(),
     });
 
-    // Agora o botão de envio deve estar habilitado
     submitButton = screen.getByRole("button", { name: /submit/i });
     expect(submitButton).toBeEnabled();
   });
@@ -131,14 +125,11 @@ describe("BookingForm Component", () => {
     fireEvent.submit(form);
 
     await waitFor(() => {
-      // Verifica se saveBooking foi chamada com os dados corretos
       expect(mockSaveBooking).toHaveBeenCalledWith({
         property: { id: "1", name: "Property 1" },
         checkInDate: new Date("2023-01-04"),
         checkOutDate: new Date("2023-01-06"),
       });
-
-      // Verifica se setErrorMessage foi chamada com a mensagem correta
       expect(mockSetErrorMessage).toHaveBeenCalledWith(
         "Booking dates overlap with an existing booking for this property"
       );
